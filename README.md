@@ -27,7 +27,7 @@ Only one member in each team will do the following:
 2. From the folder of the previous repository, upload the source to the new repository.
 For example, for team SBE404-2020-Team01, in the folder of the previous task, the responsible member may run the following command:
 
-`git push git@github.com:sbme-tutorials/cv404-2020-assignment-02-sbe404-2020-team01.git master -u`
+   ``git push git@github.com:sbme-tutorials/cv404-2020-assignment-02-sbe404-2020-team01.git master -u``
 
 Now you will find your work of the previous task uploaded to the new repository. Now clone the new repository in an independent folder.
 
