@@ -26,6 +26,7 @@ Only one member in each team will do the following:
 
 2. From the folder of the previous repository, upload the source to the new repository.
 For example, for team SBE404-2020-Team01, in the folder of the previous task, the responsible member may run the following command:
+
 `git push git@github.com:sbme-tutorials/cv404-2020-assignment-02-sbe404-2020-team01.git master -u`
 
 Now you will find your work of the previous task uploaded to the new repository. Now clone the new repository in an independent folder.
@@ -39,6 +40,7 @@ You need to implement Python functions which will support the following tasks:
 1. For all given images; detect edges using Canny edge detector, detect lines and circles located in these images (if any). Superimpose the detected shapes on the images.
 
 2. For given images; initialize the contour for a given object and evolve the Active Contour Model (snake) using the greedy algorithm. Represent the output as chain code and compute the perimeter and the area inside these contours.
+
 You should implement these tasks **without depending on OpenCV library or alike**.
 
 
