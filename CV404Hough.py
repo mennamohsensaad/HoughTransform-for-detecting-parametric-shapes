@@ -2,21 +2,16 @@ from PyQt5 import QtWidgets,QtGui , QtCore ,Qt
 from PyQt5.QtWidgets import   QFileDialog  ,QWidget,QApplication
 from PyQt5.QtGui import QPixmap
 from MainWindow import Ui_MainWindow
-from PIL import Image
-from PIL.ImageQt import ImageQt
-import sys
-from os import listdir
-from os.path import isfile , join
 import numpy as np
 from  qimage2ndarray import array2qimage
 from scipy import ndimage
-#import array2qimage 
-import math
-import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 from scipy.ndimage.filters import convolve
+from PIL import Image
 from numpy import asarray
 import cv2
+import math
+import sys
 
 
 class Hough(QtWidgets.QMainWindow):
