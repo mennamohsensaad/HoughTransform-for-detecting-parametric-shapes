@@ -866,9 +866,9 @@
       <property name="geometry">
        <rect>
         <x>510</x>
-        <y>40</y>
+        <y>10</y>
         <width>331</width>
-        <height>231</height>
+        <height>200</height>
        </rect>
       </property>
       <property name="autoFillBackground">
@@ -894,9 +894,9 @@
       <property name="geometry">
        <rect>
         <x>170</x>
-        <y>40</y>
+        <y>10</y>
         <width>331</width>
-        <height>231</height>
+        <height>200</height>
        </rect>
       </property>
       <property name="autoFillBackground">
@@ -920,7 +920,7 @@
        <rect>
         <x>20</x>
         <y>310</y>
-        <width>751</width>
+        <width>471</width>
         <height>111</height>
        </rect>
       </property>
@@ -932,7 +932,7 @@
         <rect>
          <x>10</x>
          <y>40</y>
-         <width>311</width>
+         <width>181</width>
          <height>41</height>
         </rect>
        </property>
@@ -971,9 +971,9 @@
       <widget class="QGroupBox" name="groupBox_6">
        <property name="geometry">
         <rect>
-         <x>380</x>
+         <x>210</x>
          <y>30</y>
-         <width>311</width>
+         <width>231</width>
          <height>71</height>
         </rect>
        </property>
@@ -1003,7 +1003,7 @@
      <widget class="QLabel" name="label_7">
       <property name="geometry">
        <rect>
-        <x>400</x>
+        <x>211</x>
         <y>360</y>
         <width>152</width>
         <height>39</height>
@@ -1016,11 +1016,65 @@
      <widget class="QLineEdit" name="lineEdit_mask_size">
       <property name="geometry">
        <rect>
-        <x>540</x>
+        <x>351</x>
         <y>370</y>
         <width>51</width>
         <height>31</height>
        </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_Hough_output_2">
+      <property name="geometry">
+       <rect>
+        <x>510</x>
+        <y>220</y>
+        <width>331</width>
+        <height>200</height>
+       </rect>
+      </property>
+      <property name="autoFillBackground">
+       <bool>true</bool>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::Box</enum>
+      </property>
+      <property name="text">
+       <string>Output image2</string>
+      </property>
+      <property name="textFormat">
+       <enum>Qt::PlainText</enum>
+      </property>
+      <property name="scaledContents">
+       <bool>true</bool>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_8">
+      <property name="geometry">
+       <rect>
+        <x>400</x>
+        <y>250</y>
+        <width>101</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>canny using opencv</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_opencv">
+      <property name="geometry">
+       <rect>
+        <x>410</x>
+        <y>280</y>
+        <width>75</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Apply</string>
       </property>
      </widget>
     </widget>

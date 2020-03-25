@@ -8,7 +8,7 @@ import sys
 from os import listdir
 from os.path import isfile , join
 import numpy as np
-import qimage2ndarray
+from  qimage2ndarray import array2qimage
 from scipy import ndimage
 #import array2qimage 
 import math
@@ -38,7 +38,7 @@ class Hough(QtWidgets.QMainWindow):
         self.highThreshold = 0.15
         self.ui.pushButton_Hough_load.clicked.connect(self.LoadImage)
         self.ui.Hough_ApplyButton.clicked.connect(self.Apply_canny)
-        
+        self.ui.pushButton_opencv.clicked.connect(self.Apply_canny_with_opencv)
 
       
     def LoadImage(self):  
@@ -203,13 +203,16 @@ class Hough(QtWidgets.QMainWindow):
                 img=Image.fromarray(np.uint8(img))    
                 img.save("canny_edges.jpg")    
 
-
-
-
-
-
-
-
+    def Apply_canny_with_opencv(self):    
+       img = cv2.imread(self.fileName,0)
+       edges = cv2.Canny(img,100,200)
+       print (edges)
+       pixels=np.array(edges)
+        #gray2qimage
+       iamge=array2qimage(pixels)
+       pixmap = QPixmap( iamge)
+       self.ui.label_Hough_output_2.setPixmap(pixmap)
+       self.ui.label_Hough_output_2.show
 
 
 
