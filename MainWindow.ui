@@ -26,8 +26,8 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>0</y>
+      <x>10</x>
+      <y>10</y>
       <width>889</width>
       <height>449</height>
      </rect>
@@ -830,7 +830,7 @@
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>200</y>
+        <y>172</y>
         <width>31</width>
         <height>21</height>
        </rect>
@@ -839,17 +839,7 @@
        <string>Size:</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_17">
-      <property name="geometry">
-       <rect>
-        <x>60</x>
-        <y>150</y>
-        <width>101</width>
-        <height>20</height>
-       </rect>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="pushButton_filters_load_3">
+     <widget class="QPushButton" name="pushButton_Hough_load">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -862,30 +852,17 @@
        <string>Load Image</string>
       </property>
      </widget>
-     <widget class="QLabel" name="label_24">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>150</y>
-        <width>41</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Name:</string>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="lineEdit_18">
+     <widget class="QLineEdit" name="lineEdit_size_Hough">
       <property name="geometry">
        <rect>
         <x>60</x>
-        <y>200</y>
-        <width>51</width>
+        <y>172</y>
+        <width>81</width>
         <height>31</height>
        </rect>
       </property>
      </widget>
-     <widget class="QLabel" name="label_filters_output_3">
+     <widget class="QLabel" name="label_Hough_output">
       <property name="geometry">
        <rect>
         <x>510</x>
@@ -913,7 +890,7 @@
        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
       </property>
      </widget>
-     <widget class="QLabel" name="label_filters_input_3">
+     <widget class="QLabel" name="label_Hough_input">
       <property name="geometry">
        <rect>
         <x>170</x>
@@ -968,7 +945,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QComboBox" name="comboBox_5">
+         <widget class="QComboBox" name="comboBox_shape">
           <property name="currentText">
            <string>Select</string>
           </property>
@@ -1005,7 +982,7 @@
        </property>
       </widget>
      </widget>
-     <widget class="QPushButton" name="Harris_ApplyButton">
+     <widget class="QPushButton" name="Hough_ApplyButton">
       <property name="geometry">
        <rect>
         <x>30</x>
@@ -1023,25 +1000,35 @@
        <string>Apply</string>
       </property>
      </widget>
+     <widget class="QLabel" name="label_7">
+      <property name="geometry">
+       <rect>
+        <x>400</x>
+        <y>360</y>
+        <width>152</width>
+        <height>39</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>                          Mask size</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_mask_size">
+      <property name="geometry">
+       <rect>
+        <x>540</x>
+        <y>370</y>
+        <width>51</width>
+        <height>31</height>
+       </rect>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="tab_3">
      <attribute name="title">
       <string>Harris</string>
      </attribute>
-     <widget class="QLabel" name="label_36">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>140</y>
-        <width>41</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Name:</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_filters_output_4">
+     <widget class="QLabel" name="label_Harris_output">
       <property name="geometry">
        <rect>
         <x>510</x>
@@ -1069,7 +1056,7 @@
        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_filters_load_4">
+     <widget class="QPushButton" name="pushButton_Harris_load">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -1082,17 +1069,17 @@
        <string>Load Image</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_20">
+     <widget class="QLineEdit" name="lineEdit_size_Harris">
       <property name="geometry">
        <rect>
         <x>60</x>
-        <y>190</y>
-        <width>51</width>
+        <y>160</y>
+        <width>81</width>
         <height>31</height>
        </rect>
       </property>
      </widget>
-     <widget class="QLabel" name="label_filters_input_4">
+     <widget class="QLabel" name="label_Harris_input">
       <property name="geometry">
        <rect>
         <x>170</x>
@@ -1147,7 +1134,7 @@
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>190</y>
+        <y>160</y>
         <width>31</width>
         <height>21</height>
        </rect>
@@ -1156,17 +1143,7 @@
        <string>Size:</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_22">
-      <property name="geometry">
-       <rect>
-        <x>60</x>
-        <y>140</y>
-        <width>101</width>
-        <height>20</height>
-       </rect>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="Hough_ApplyButton_2">
+     <widget class="QPushButton" name="Harris_ApplyButton_2">
       <property name="geometry">
        <rect>
         <x>20</x>

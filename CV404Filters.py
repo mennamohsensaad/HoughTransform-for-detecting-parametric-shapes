@@ -22,7 +22,7 @@ import math
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 from scipy.ndimage.filters import convolve
-import cv2
+#import cv2
 
 #
 #
@@ -484,6 +484,8 @@ def main():
 
 
 if __name__ == "__main__":
-    main()        
+   main()
+   
+          
             
         
