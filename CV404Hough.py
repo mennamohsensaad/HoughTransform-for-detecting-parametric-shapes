@@ -197,7 +197,8 @@ class Hough(QtWidgets.QMainWindow):
                     img = img.transpose(1,2,0)
                 img=Image.fromarray(np.uint8(img))    
                 img.save("canny_edges.jpg")    
-
+#___________________________________to check accuracy of our implementation to canny edges detector ____________________
+#___________________________  try canny with opencv to compare results with our implemetation for canny_________________
     def Apply_canny_with_opencv(self):    
        img = cv2.imread(self.fileName,0)
        edges = cv2.Canny(img,100,200)
