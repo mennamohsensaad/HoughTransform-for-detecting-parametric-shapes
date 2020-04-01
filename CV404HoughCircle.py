@@ -4,6 +4,10 @@ from scipy.ndimage import imread
 import math
 #from astropy.convolution import convolve
 
+
+
+###_____________________________________________________Al-Shimaa____________________________###
+
 #____________________________________________________handle Image_______________________________________#
 class imarray(object):
 
@@ -40,9 +44,9 @@ class imarray(object):
 #			try :
 #				self.__dimension = self.__image.shape
 #			except :
-#				print("Internal Error! Image file not supported")
+#				print(" Error!")
 		else :
-			print("Assignment Error. Given input is not an image")
+			print(" Error")
 
 	def getShape(self):
 		return self.__dimension
@@ -51,15 +55,15 @@ class imarray(object):
 	def getExtension(self):
 		return self.__type
 	ext = property(getExtension)
-
-	def displayImage(self,mode='Greys_r'):
-#		try:
-#			plt.imshow(self.__image,cmap=mode)
-#		except:
-#			print("Image could not be displayed")
-#			return
-		plt.show()
-	disp = property(displayImage)
+#
+#	def displayImage(self,mode='Greys_r'):
+##		try:
+##			plt.imshow(self.__image,cmap=mode)
+##		except:
+##			print("Image could not be displayed")
+##			return
+#		plt.show()
+#	disp = property(displayImage)
 
 #	def save(self,name):
 #		plt.imsave(name,self.__image)
@@ -183,11 +187,12 @@ def displayCircles(A):
     for r,x,y in circleCoordinates:
         circle.append(plt.Circle((y,x),r,color=(1,0,0),fill=False))
         fig.add_subplot(111).add_artist(circle[-1])
+          
     plt.show()
 
-file_path = './images.jpg'
+file_path = './images/CircleTrafficLight.jpg'
 img = imarray(file_path)
 image = gaussian_filter(3,3,1,img)                                                
 image = edge(image,128)                                               
-image = detectCircles(image,8,15,[25,10])
+image = detectCircles(image,13,15,[40,10])
 displayCircles(image)
