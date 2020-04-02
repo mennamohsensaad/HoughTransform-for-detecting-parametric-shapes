@@ -10,6 +10,7 @@ from scipy.ndimage.filters import convolve
 from PIL import Image
 from numpy import asarray
 import cv2
+import cv2 as cv
 import math
 import sys
 import matplotlib.pyplot as plt
@@ -22,6 +23,9 @@ from skimage.util import img_as_float
 from scipy.ndimage import imread
 import handleImageClass as handleImage
 from collections import defaultdict
+import imageio
+
+
 
 
 
@@ -56,9 +60,10 @@ class CV(QtWidgets.QMainWindow):
         self.ui.snake_apply.clicked.connect(self.Apply_snake)
         self.ui.label_snake_input.mousePressEvent=self.getPixel
         self.ui.pushButton_Harris_load.clicked.connect(self.LoadImage3)
+        self.ui.Harris_ApplyButton_2.clicked.connect(self.Apply_Harris)
     
     def LoadImage(self):  
-        self.fileName, _filter = QFileDialog.getOpenFileName(self, "Title"," " , "Filter -- img file (*.jpg *.PNG);;img file (*.PNG)")
+        self.fileName, _filter = QFileDialog.getOpenFileName(self, "Title"," " , "Filter -- img file (*.jpg *.PNG *.JPEG *.JFIF);;img file (*.jpg *.PNG *.JPEG *.JFIF)")
         if self.fileName:
             self.pixmap = QPixmap(self.fileName)
             self.input_img =mpimg.imread(self.fileName)
@@ -358,7 +363,7 @@ class CV(QtWidgets.QMainWindow):
 
 
 
-#####################################################HOUGH-TRAANSFORM-LINE-DETECTION###############333
+#____________________________________________HOUGH-TRAANSFORM-LINE-DETECTION_________________________________________
 
 #hough transform
     def Hough_Line(self,image):
@@ -442,16 +447,16 @@ class CV(QtWidgets.QMainWindow):
         self.ui.label_Hough_output_2.clear() 
         input_size=(self.ui.lineEdit_mask_size.text())
         print(input_size)      
-        imag = cv2.imread(self.fileName) 
+        imag = cv2.imread(self.fileName)
+        
         
         #img = cv2.imread('images/beauflor-spirit-chessboard-vinyl-flooring-p755-3264_image.jpg')
         # Convert the img to grayscale 
         gray = cv2.cvtColor(imag,cv2.COLOR_BGR2GRAY) 
         # Apply edge detection method on the image 
         self.edges = cv2.Canny(gray,50,150,apertureSize = 3) 
-        #cv2.imshow('gray',gray)
-        #cv2.imshow('edges',edges)
-        #test hough line 
+        #cv2.imshow('gray_scale',gray_scale)
+        
         accumulator,thetas,rhos = self.Hough_Line(self.edges)
         self.lines, self.acc2 = self.Draw_Lines( accumulator,thetas,rhos,90)
         #cv2.imshow('acc2',acc2)
@@ -464,8 +469,7 @@ class CV(QtWidgets.QMainWindow):
             pt1 = tuple((pt0 + 1000 * np.array([-b,a])).astype(int))
             pt2 = tuple((pt0 - 1000 * np.array([-b,a])).astype(int))
             cv2.line(imag, pt1, pt2, (0,0,255), 3)
-        
-            cv2.line(imag, pt1, pt2, (0,0,255), 3)   
+          
         pixels=np.array(imag)
         #gray2qimage
         im=array2qimage(pixels)
@@ -500,7 +504,8 @@ class CV(QtWidgets.QMainWindow):
             self.ui.label_snake_output.clear()
             self.ui.label_snake_output_running.clear()
             pixels = asarray(self.input_img)
-            #print(pixels.shape)
+            self.Image =io.imread(self.fileName,0)
+            print(self.Image)
             self.ui.lineEdit_size_snake.setText(""+str(pixels.shape[0])+" "+str('x')+" "+str(pixels.shape[1])+"")
             
     
@@ -508,6 +513,7 @@ class CV(QtWidgets.QMainWindow):
         
         snake_list=self.active_contour_model(self.fileName)
         #print(snake_list)
+        self.calc_area_preimeter(snake_list)
         chainCode=self.DriverFunction(snake_list) 
         self.ui.lineEdit_chain_code.setText(""+str(chainCode)+"")#+str('x')+""+str(" ")+"")
         
@@ -760,8 +766,10 @@ class CV(QtWidgets.QMainWindow):
         self.ui.label_snake_input.setPixmap(self.pixmap)
         self.ui.label_snake_output.clear()
         self.ui.label_snake_output_running.clear() 
-        
-    
+        self.ui.lineEdit_area_of_contour.setText(""+str("")+"")
+        self.ui.lineEdit_Perimeter_of_contour.setText(""+str("")+"")
+        self.ui.lineEdit_chain_code.setText(""+str("")+"")
+        self.ui.lineEdit_iteration_num.setText(""+str("")+"")
     def Reset(self): 
         self.Clear_anchors()
 #        pixels=np.ones((10,10))
@@ -774,6 +782,8 @@ class CV(QtWidgets.QMainWindow):
         self.ui.lineEdit_alpha.setText(""+str("")+"")
         self.ui.lineEdit_beta.setText(""+str("")+"")
         self.ui.lineEdit_gamma.setText(""+str("")+"")
+        self.ui.lineEdit_area_of_contour.setText(""+str("")+"")
+        self.ui.lineEdit_Perimeter_of_contour.setText(""+str("")+"")
         
         
     def DriverFunction(self,ListOfPoints): 
@@ -802,11 +812,38 @@ class CV(QtWidgets.QMainWindow):
             chainCode.append(self.getChainCode(a[0], a[1], b[0], b[1])) 
         return chainCode 
  
+    def calc_area_preimeter(self,snake):
+        
+        area=0
+        primeter=0
+        for i in range(len(snake)-1): 
+            a =snake[i] 
+            b=snake[i + 1] 
+            #print(b)
+            x,y=a[0],a[1]
+            nex_x,nex_y=b[0],b[1]
+            area += (x*nex_y-y*nex_x)/10
+            primeter +=abs((x-nex_x)+(y-nex_y)*1j)/5
+        area = area / 12
+        self.ui.lineEdit_area_of_contour.setText(""+str(int(area))+"")
+        self.ui.lineEdit_Perimeter_of_contour.setText(""+str(int(primeter))+"")
+        return area,primeter
+        
+
+#    
+#    def Area_and_perimeter(self):
+#        
+#        thresh = cv.threshold(self.Image,127,255,0)
+#        im2,contours,hierarchy = cv.findContours(thresh, 1, 2)
+#        area = cv.contourArea(contours[0])
+#        self.ui.lineEdit_area_of_contour.setText(""+str(area)+"")
+#        perimeter = cv.arcLength(contours[0],True)
+#        self.ui.lineEdit_Perimeter_of_contour.setText(""+str(perimeter)+"")
     
 #_________________________________________Harris_corner_detectors____________________________________________________    
      
     def LoadImage3(self):  
-        self.fileName, _filter = QFileDialog.getOpenFileName(self, "Title"," " , "Filter -- img file (*.jpg *.PNG);;img file (*.PNG)")
+        self.fileName, _filter = QFileDialog.getOpenFileName(self, "Title"," " , "Filter -- img file (*.jpg *.PNG *.JPEG *.JFIF);;img file (*.jpg *.PNG *.JPEG *.JFIF)")
         if self.fileName:
             self.pixmap = QPixmap(self.fileName)
             self.input_img =mpimg.imread(self.fileName)
@@ -815,6 +852,136 @@ class CV(QtWidgets.QMainWindow):
             pixels = asarray(self.input_img)
             #print(pixels.shape)
             self.ui.lineEdit_size_Harris.setText(""+str(pixels.shape[0])+" "+str('x')+" "+str(pixels.shape[1])+"")
+            
+     
+    
+    #Functions used in Phase I
+        
+        
+    #Detemine gradient function for Fx and Fy using sobel filter(normlized)
+    def gradient_x(self,img) :
+        grad_img = ndimage.convolve(img, np.array([[-1, 0, 1],[-2, 0, 2],[-1, 0, 1]]))
+        return grad_img/np.max(grad_img)
+    
+    def gradient_y(self,img) :
+        grad_img = ndimage.convolve(img, np.array([[-1, -2, -1],[0, 0, 0],[1, 2, 1]]))
+        return grad_img/np.max(grad_img)
+    
+    
+    #Harris Corner Detector Implementation and test
+    def Apply_Harris (self) :
+        
+        input_img = cv2.imread(self.fileName)
+
+        ratio =float(self.ui.ratio.text())
+        
+        #Phase I : Find filtered grdient
+        #Load the input image
+#        input_img = imageio.imread(img_path)
+        
+        #Convert the image to grayscale
+        gray_input_img = rgb2gray(input_img)
+        #Apply gaussian blurring
+        #blur_img = ndimage.gaussian_filter(gray_input_img, sigma = 1.0)
+        blur_img = gaussian(gray_input_img, sigma = 0.8)
+        #Find gradient Fx
+        x_grad = self.gradient_x(blur_img)
+        #Find gradient Fy
+        y_grad = self.gradient_y(blur_img)
+        
+        #Phase II : Find corners
+        xx_grad = x_grad * x_grad
+        yy_grad = y_grad * y_grad
+        xy_grad = x_grad * y_grad
+        tuple_data = [] #Contains y, x Co-ordinates and its corner response
+        k = 0.05
+        max = 0
+        
+        for i in range(1, int(input_img.shape[0] - 1)) :
+                for j in range(1, int(input_img.shape[1] - 1)) :
+                    window_x = xx_grad[i-4 : i+5 , j-4 : j+5]
+                    window_y = yy_grad[i-4 : i+5 , j-4 : j+5]
+                    window_xy = xy_grad[i-4 : i+5 , j-4 : j+5]
+                    sum_xx = np.sum(window_x)
+                    sum_yy = np.sum(window_y)
+                    sum_xy = np.sum(window_xy)
+                    determinant = (sum_xx * sum_yy) - (sum_xy * sum_xy)
+                    trace = sum_xx + sum_yy
+                    R = determinant - (k * trace * trace)
+                    tuple_data.append((i, j, R))
+                    if(R > max) :
+                        max = R
+        
+        #L contains y, x co-ordinate(whose value is greater than threshold) and their corner response of those co-ordinates
+        L = []
+        L2 = []
+        threshold_T = ratio * max
+        
+        for res in tuple_data :
+            i, j, R = res
+            L2.append([i, j, R])    #without using thresholding
+            if R > threshold_T :
+                L.append([i, j, R]) #using thresholding
+        
+              
+        
+        
+        #Phase III : Non maximal suppression
+        sorted_L = sorted(L, key = lambda x: x[2], reverse = True)
+        final_L = [] #final_l contains list after non maximal suppression
+        final_L.append(sorted_L[0][:-1])
+        dis = 10
+        xc, yc = [], []
+        for i in sorted_L :
+            for j in final_L :
+                if(abs(i[0] - j[0] <= dis) and abs(i[1] - j[1]) <= dis) :
+                    break
+            else :
+                final_L.append(i[:-1])
+                xc.append(i[1])
+                yc.append(i[0])
+        
+                
+        sorted_L2 = sorted(L2, key = lambda x: x[2], reverse = True)
+        final_L2 = [] #final_l contains list after non maximal suppression
+        final_L2.append(sorted_L2[0][:-1])
+        xc2, yc2 = [], []
+        for i in sorted_L2 :
+            for j in final_L2 :
+                if(abs(i[0] - j[0] <= dis) and abs(i[1] - j[1]) <= dis) :
+                    break
+            else :
+                final_L2.append(i[:-1])
+                xc2.append(i[1])
+                yc2.append(i[0])
+        
+        #using thresholding
+#        plt.imshow(input_img, cmap = plt.get_cmap('gray'))
+#        plt.plot(xc, yc, '*', color='purple')
+#        plt.show()
+        
+        #QApplication.processEvents()
+        pixmap = QPixmap(self.fileName)
+        painter= QtGui.QPainter(pixmap)
+        painter.begin(self)
+        penRect= QtGui.QPen(QtCore.Qt.red)
+        penRect.setWidth(4)
+        painter.setPen(penRect)
+        for i in range(len(xc)): 
+            x=  xc[i]+2
+            y= yc[i]
+            #print(b)
+            painter.drawPoint(x,y)
+        
+        painter.end()
+        result=pixmap#.scaled(int(self.pixmap.height()),int(self.pixmap.width()))
+        self.ui.label_Harris_output.setPixmap(result)
+        #QApplication.processEvents()
+        
+
+        
+        
+        
 def main():
     app = QtWidgets.QApplication(sys.argv)
     application =CV()
@@ -827,4 +994,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

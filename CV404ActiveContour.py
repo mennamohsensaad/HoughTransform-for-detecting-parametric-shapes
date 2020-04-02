@@ -7,6 +7,7 @@ import cv2
 from scipy.interpolate import RectBivariateSpline
 from skimage.util import img_as_float
 from skimage.filters import sobel
+import cv2 as cv 
 
 
 
@@ -19,7 +20,7 @@ def normalize(array, newMin, newMax):   #to normalize from 0 to 1
 
 
 
-def intp(x_list,y_list):
+def interpolation(x_list,y_list):
     new_x = []
     new_y = []
     lenth = len(x_list)   #length of contour 
@@ -54,6 +55,8 @@ def active_contour_model(imageName,x_list,y_list):
     #gaussian_img_norm=normaliz(gaussian_img, minVal=0, maxVal=1)
     snake = active_contour( gaussian_img,color_img,
                            init_contour, alpha=0.015, beta=10, gamma=0.001)
+    
+
     fig, ax = plt.subplots(figsize=(7, 7))
     ax.imshow(img)
     ax.plot(snake[:, 0], snake[:, 1], '-b', lw=3)
@@ -155,8 +158,8 @@ def active_contour(image,color, snake, alpha=0.01, beta=0.1,
 
 
         snake = np.array([x, y]).T
-       
-        fig, ax = plt.subplots(figsize=(7, 7))
+        """show iteration of running snake open the following : """
+        """fig, ax = plt.subplots(figsize=(7, 7))
         ax.imshow(img, cmap=plt.get_cmap('gray'))
         #ax.plot(np.array([x, y]), '-b', lw=3)       
         ax.plot(snake[:, 0], snake[:, 1], '-b', lw=3)
@@ -165,6 +168,7 @@ def active_contour(image,color, snake, alpha=0.01, beta=0.1,
         plt.show(block=False), plt.pause(0.001)
         del ax.lines[0]
     plt.close()
+    """
     return np.array([x, y]).T
 #____________________________________________chain_code____________________________________________________________
 
@@ -210,6 +214,20 @@ def DriverFunction(ListOfPoints):
 
 
 
+def calc_area_preimeter(snake):
+        
+        area=0
+        primeter=0
+        for i in range(len(snake)-1): 
+            a =snake[i] 
+            b=snake[i + 1] 
+            #print(b)
+            x,y=a[0],a[1]
+            nex_x,nex_y=b[0],b[1]
+            area += (x*nex_y-y*nex_x)/10
+            primeter +=abs((x-nex_x)+(y-nex_y)*1j)/5
+        area = area / 12
+        return area,primeter
 
 
 imageName = "./images/cell.jpg"
@@ -222,12 +240,11 @@ x_list = x
 #print(x_list)
 y_list = y
 img = cv2.imread(imageName,0)
-x_list,y_list=intp(x_list,y_list)
+x_list,y_list=interpolation(x_list,y_list)
 list_s=active_contour_model(imageName,x_list,y_list)
 chainCode=DriverFunction(list_s)     
-
-
-
-
+area,perimeter=calc_area_preimeter(list_s)
+print("area of contour is :",area )
+print("perimeter of contour is :",perimeter)
 
 
