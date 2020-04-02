@@ -1032,7 +1032,7 @@ class CV(QtWidgets.QMainWindow):
         ##_______________HYBRID_____________
     def button_clicked1(self):
         
-        fileName, _filter = QFileDialog.getOpenFileName(self, "Title"," " , "Filter -- img file (*.JPEG *.PNG);;img file ( *.JPEG *.PNG)")
+        fileName, _filter = QFileDialog.getOpenFileName(self, "Title"," " , "Filter -- img file (*.JPG *.JPEG *.PNG);;img file ( *.JPG *.JPEG *.PNG)")
         if fileName:
             pixmap = QPixmap(fileName)
             self.pixmap = pixmap.scaled(256, 256, QtCore.Qt.KeepAspectRatio,QtCore.Qt.FastTransformation) 
@@ -1058,8 +1058,8 @@ class CV(QtWidgets.QMainWindow):
 #        return np.dot(rgb_image[...,:3], [0.299, 0.587, 0.114])  # ... mean  all rgb values     
     
     def button_clicked2(self):  
-#<<<<<<< HEAD
-        fileName, _filter = QFileDialog.getOpenFileName(self, "Title"," " , "Filter -- img file (*.JPEG);;img file (*.JPEG)")
+
+        fileName, _filter = QFileDialog.getOpenFileName(self, "Title"," " , "Filter -- img file (*.JPG *.JPEG);;img file (*.JPG *.JPEG)")
 
         if fileName:
             pixmap = QPixmap(fileName)
