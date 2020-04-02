@@ -1318,7 +1318,7 @@ class CV(QtWidgets.QMainWindow):
               #print("cumaltive")
               self.draw_curve=1
               print(self.draw_curve)
-              self.check_RGB_or_Gray_Equalize()
+              self.check_color_or_Gray_Equalize()
         
           else :
              self.distribution_curve()
