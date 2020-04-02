@@ -1,4 +1,3 @@
-
 from PyQt5 import QtWidgets,QtGui , QtCore ,Qt
 from PyQt5.QtWidgets import   QFileDialog  ,QWidget,QApplication
 from PyQt5.QtGui import QPixmap
@@ -14,15 +13,8 @@ import cv2
 import math
 import sys
 import matplotlib.pyplot as plt
-from scipy.ndimage import imread
-import handleImageClass as handleImage
 from collections import defaultdict
 
-
-
-
-
-    
 class Hough(QtWidgets.QMainWindow):
     def __init__(self):
         super(Hough, self).__init__()
@@ -40,17 +32,14 @@ class Hough(QtWidgets.QMainWindow):
         self.kernel_size = 5
         self.lowThreshold = 0.05
         self.highThreshold = 0.15
-        self.ui.comboBox_shape.currentIndexChanged.connect(self.IMPOSE_Lines_Circles)
         self.ui.pushButton_Hough_load.clicked.connect(self.LoadImage)
-#        self.ui.Hough_ApplyButton.clicked.connect(self.Hough_space) #self.Apply_canny
+        self.ui.Hough_ApplyButton.clicked.connect(self.Apply_canny)
+        self.ui.comboBox_shape.currentIndexChanged.connect(self.IMPOSE_Lines)
         self.ui.pushButton_opencv.clicked.connect(self.Apply_canny_with_opencv)
-        #img =handleImage.imarray(object)
-        
-        
 
-      
+#      
     def LoadImage(self):  
-        self.fileName, _filter = QFileDialog.getOpenFileName(self, "Title"," " , "Filter -- img file (*.jpg *.PNG *.JFIF);;img file (*.PNG)")
+        self.fileName, _filter = QFileDialog.getOpenFileName(self, "Title"," " , "Filter -- img file (*.jpg *.PNG);;img file (*.PNG)")
         if self.fileName:
             pixmap = QPixmap(self.fileName)
             self.pixmap = pixmap.scaled(256,256, QtCore.Qt.KeepAspectRatio, QtCore.Qt.FastTransformation) 
@@ -62,7 +51,7 @@ class Hough(QtWidgets.QMainWindow):
             self.ui.label_Hough_input.show
             #to show size of the image 
             pixels = asarray(self.input_img)
-            #print(pixels.shape)
+            print(pixels.shape)
             self.ui.lineEdit_size_Hough.setText(""+str(pixels.shape[0])+" "+str('x')+" "+str(pixels.shape[1])+"")
     
     def rgb2gray(self,rgb):
@@ -70,9 +59,9 @@ class Hough(QtWidgets.QMainWindow):
           r, g, b = rgb[:,:,0], rgb[:,:,1], rgb[:,:,2]
           gray = 0.2989 * r + 0.5870 * g + 0.1140 * b
           return gray 
-
-
-    
+#
+#
+#    
     def Apply_canny(self):
        self.canny_filter()
        self.ui.label_Hough_output.setPixmap(QPixmap("canny_edges.jpg"))
@@ -94,16 +83,16 @@ class Hough(QtWidgets.QMainWindow):
             canny_img_final.append(img_final)
             print(canny_img_final)
             self.visualize(canny_img_final, 'gray')                 
-#    def gaussian(self,m,n,sigma):
-#        gaussian=np.zeros((m,n))
-#        m=m//2
-#        n=n//2
-#        for x in range (-m,m+1):
-#            for y in range (-n,n+1):
-#                x1=sigma*math.sqrt(2*np.pi)
-#                x2=np.exp(-(x**2+y**2)/(2*sigma**2))
-#                gaussian[x+m,y+n]=(1/x1)*x2  
-#        return gaussian
+    def gaussian(self,m,n,sigma):
+        gaussian=np.zeros((m,n))
+        m=m//2
+        n=n//2
+        for x in range (-m,m+1):
+            for y in range (-n,n+1):
+                x1=sigma*math.sqrt(2*np.pi)
+                x2=np.exp(-(x**2+y**2)/(2*sigma**2))
+                gaussian[x+m,y+n]=(1/x1)*x2  
+        return gaussian
     
 
     def sobel_filter_for_canny(self,img):
@@ -209,14 +198,7 @@ class Hough(QtWidgets.QMainWindow):
                 if img.shape[0] == 3:
                     img = img.transpose(1,2,0)
                 img=Image.fromarray(np.uint8(img))    
-                img.save("canny_edges.jpg")
-#                pixels=np.array(img)
-#        #gray2qimage
-#                iamge=array2qimage(pixels)
-#                pixmap = QPixmap( iamge)
-#                self.ui.label_Hough_output_2.setPixmap(pixmap)
-#                self.ui.label_Hough_output_2.show
-
+                img.save("canny_edges.jpg")    
 #___________________________________to check accuracy of our implementation to canny edges detector ____________________
 #___________________________  try canny with opencv to compare results with our implemetation for canny_________________
     def Apply_canny_with_opencv(self):    
@@ -229,162 +211,8 @@ class Hough(QtWidgets.QMainWindow):
        pixmap = QPixmap( iamge)
        self.ui.label_Hough_output_2.setPixmap(pixmap)
        self.ui.label_Hough_output_2.show
-
-#________________________________________________HoughFunctions___________________________#
-       
-       
-    
-
-#________________________________________________________gaussian & sobel & laplacian __________________________________#
-    
-    def gaussian(self,m,n,sigma):
-        gaussian=np.zeros((m,n))
-        m=m//2
-        n=n//2
-        for x in range (-m,m+1):
-            for y in range (-n,n+1):
-                x1=sigma*math.sqrt(2*np.pi)
-                x2=np.exp(-(x**2+y**2)/(2*sigma**2))
-                gaussian[x+m,y+n]=(1/x1)*x2  
-        return gaussian
-    
-    def gaussian_filter(self,m,n,sigma,img):
-        g=self.gaussian(m,n,sigma)
-        img.convolve(g)
-        return img
-        
-    
-    def edge(self,img,threshold):
-        # Laplacian with sobel to detect the edges
-        laplacian = np.array([[1,1,1],[1,-8,1],[1,1,1]])
-        print(sum(sum(laplacian)))
-        sobel_x = ([[1, 0, -1], [2, 0, -2], [1, 0, -1]])
-        sobel_y = ([[1, 2, 1], [0, 0, 0], [-1, -2, -1]])
-        gx = img.convolve(sobel_x)
-        gy = img.convolve(sobel_y)
-    
-        G = np.sqrt(gx ** 2 + gy ** 2) 
-        
-    
-        G[G<threshold] = 0
-        Lap = img.convolve(laplacian)
-    
-        M,N = Lap.shape
-    
-        temp = np.zeros((M+2,N+2))                                                 
-        temp[1:-1,1:-1] = Lap                                                       
-        result = np.zeros((M,N))                                                   
-        for i in range(1,M+1):
-            for j in range(1,N+1):
-                #Looking for a negative pixel and checking its 8 neighbors
-                if temp[i,j]<0:                                                    
-                    for x,y in (-1,-1),(-1,0),(-1,1),(0,-1),(0,1),(1,-1),(1,0),(1,1):
-                            if temp[i+x,j+y]>0:
-                                result[i-1,j-1] = 1                                
-        #img.load(np.array(np.logical_and(result,G),dtype=np.uint8))
-        img.load(np.array(np.logical_and(result,G),dtype=np.uint8))
-        return img
-    
-    def detectCircles(self,img,threshold,region,radius):
-        M,N = img.shape
-        [R_max,R_min] = radius
-    
-        R = R_max - R_min
-        #3D accumulator array :radius, X ,Y 
-        A = np.zeros((R_max,M+2*R_max,N+2*R_max))
-        B = np.zeros((R_max,M+2*R_max,N+2*R_max))
-    
-        theta = np.arange(0,360)*np.pi/180
-        #edges = np.nonzero(img[:,:])
-        #For non Zero elements
-        edges = np.argwhere(img[:,:])
-                                                      
-        for K in range(R):
-            r = R_min+K
-            
-            circle = np.zeros((2*(r+1),2*(r+1)))
-            #Finding out the center 
-            (m,n) = (r+1,r+1)                                                       
-            for angle in theta:
-                x = int(np.round(r*np.cos(angle)))
-                y = int(np.round(r*np.sin(angle)))
-                circle[m+x,n+y] = 1
-            constant = np.argwhere(circle).shape[0]
-            #print(circle)
-            #print(constant)
-            for x,y in edges:                                                     
-                X = [x-m+R_max,x+m+R_max]                                           
-                Y= [y-n+R_max,y+n+R_max]                                            
-                A[r,X[0]:X[1],Y[0]:Y[1]] += circle
-            A[r][A[r]<threshold*constant/r] = 0
-    
-        for r,x,y in np.argwhere(A):
-            temp = A[r-region:r+region,x-region:x+region,y-region:y+region]
-            try:
-                p,a,b = np.unravel_index(np.argmax(temp),temp.shape)
-            except:
-                continue
-            B[r+(p-region),x+(a-region),y+(b-region)] = 1
-    
-        return B[:,R_max:-R_max,R_max:-R_max]   
-           
-           
-    
-    def displayCircles(self,A):
-        img = imread(self.fileName)
-        fig =plt.figure()
-        plt.imshow(img)
-        circleCoordinates = np.argwhere(A)                                          
-        circle = []
-        for r,x,y in circleCoordinates:
-            circle.append(plt.Circle((y,x),r,color=(1,0,0),fill=False))
-            fig.add_subplot(111).add_artist(circle[-1])
-            
-        #self.ui.label_filters_input.setPixmap(self.input_iamge)
-        #plt.axis('off')
-        plt.gca().set_axis_off()
-        plt.subplots_adjust(top = 1, bottom = 0, right = 1, left = 0, 
-            hspace = 0, wspace = 0)
-        plt.margins(0,0)
-        plt.gca().xaxis.set_major_locator(plt.NullLocator())
-        plt.gca().yaxis.set_major_locator(plt.NullLocator())
-#        plt.savefig("fff.jpg")
-       
-        
-        plt.savefig('fff.jpg', dpi=900, bbox_inches='tight',pad_inches=0)
-        
-        
-        
-        
-#    def Hough_space(self):
-#        self.hough = str(self.ui.comboBox_shape.currentText())
-#        print(self.hough)
-#        if self.hough=="Lines":
-#            self.filter_img =self.im_gaussian_noise(0,0.3)
-#        elif self.hough=="Circles": 
-#            input_size=(self.ui.lineEdit_mask_size.text())
-#            print(input_size)
-#            #self.fileName
-#            self.img =handleImage.imarray(self.fileName)
-#            self.filter_img =self.gaussian_filter(int(input_size),int(input_size),2,self.img)            
-#            self.image = self.edge(self.filter_img,128) 
-#            
-#                              
-#            self.image = self.detectCircles(self.image,13,15,[40,10])
-#            self.output_iamge=self.displayCircles(self.image)
-##            elif self.fileName=="images10.jpg":       
-##                 self.image = self.detectCircles(self.image,9,15,[40,10])
-##                 self.output_iamge=self.displayCircles(self.image)
-#           
-#            #self.output_iamge=self.displayCircles(self.image)
-#            
-#                  
-#            
-#            #self.ui.label_Hough_output.setPixmap(self.output_iamge)
-#            self.ui.label_Hough_output.setPixmap(QPixmap("fff.jpg"))
-#            self.ui.label_Hough_output.show()
-#        
-    #
+       plt.imshow(pixmap)
+#
 #image = misc.imread("line.png")
 ##image = misc.imread("square.png")
 #image = misc.imread("Chess_Board.svg.png")
@@ -439,32 +267,11 @@ class Hough(QtWidgets.QMainWindow):
               
 
               
-    def IMPOSE_Lines_Circles (self):
+    def IMPOSE_Lines (self):
      self.hough = str(self.ui.comboBox_shape.currentText())
      print(self.hough)
      if self.hough=="Circles":
-            input_size=(self.ui.lineEdit_mask_size.text())
-            print(input_size)
-            #self.fileName
-            self.img =handleImage.imarray(self.fileName)
-            self.filter_img =self.gaussian_filter(int(input_size),int(input_size),2,self.img)            
-            self.image = self.edge(self.filter_img,128) 
-            
-                              
-            self.image = self.detectCircles(self.image,13,15,[40,10])
-            self.output_iamge=self.displayCircles(self.image)
-#            elif self.fileName=="images10.jpg":       
-#                 self.image = self.detectCircles(self.image,9,15,[40,10])
-#                 self.output_iamge=self.displayCircles(self.image)
-           
-            #self.output_iamge=self.displayCircles(self.image)
-            
-                  
-            
-            #self.ui.label_Hough_output.setPixmap(self.output_iamge)
-            self.ui.label_Hough_output.setPixmap(QPixmap("fff.jpg"))
-            self.ui.label_Hough_output.show()
-            
+            self.filter_img =self.im_gaussian_noise(0,0.3)
      elif self.hough=="Lines": 
         input_size=(self.ui.lineEdit_mask_size.text())
         print(input_size)      
@@ -492,7 +299,15 @@ class Hough(QtWidgets.QMainWindow):
             cv2.line(imag, pt1, pt2, (0,0,255), 3)
         
             cv2.line(imag, pt1, pt2, (0,0,255), 3)
-
+            
+#        cv2.imshow('image with lines',imag) 	
+#        
+#        cv2.waitKey(0)
+#        cv2.destroyAllWindows()
+        
+#        plt.imshow(imag)
+        #    plt.subplot(122), plt.imshow(accumulator)
+#        plt.show()
         pixels=np.array(imag)
         #gray2qimage
         im=array2qimage(pixels)
@@ -500,29 +315,18 @@ class Hough(QtWidgets.QMainWindow):
         self.ui.label_Hough_output.setPixmap(pixmap)
         self.ui.label_Hough_output.show
         plt.imshow(pixmap)
-    
-    
-    
-     elif self.hough =="Canny" :    
-           self.canny_filter()
-           self.ui.label_Hough_output.setPixmap(QPixmap("canny_edges.jpg"))   
-          
-     else :  
 
-          self.ui.label_Hough_output.clear()
-        
+      
+
+
 def main():
     app = QtWidgets.QApplication(sys.argv)
     application =Hough()
     application.show()
-
-    
-  
     sys.exit(app.exec_())
 
 
 if __name__ == "__main__":
-    main()
-
+ main()
 
 
