@@ -446,7 +446,8 @@ class CV(QtWidgets.QMainWindow):
         self.ui.label_Hough_output_2.clear() 
         input_size=(self.ui.lineEdit_mask_size.text())
         print(input_size)      
-        imag = cv2.imread(self.fileName) 
+        imag = cv2.imread(self.fileName)
+        
         
         #img = cv2.imread('images/beauflor-spirit-chessboard-vinyl-flooring-p755-3264_image.jpg')
         # Convert the img to grayscale 
