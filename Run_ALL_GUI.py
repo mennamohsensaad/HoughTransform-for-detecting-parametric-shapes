@@ -996,9 +996,11 @@ class CV(QtWidgets.QMainWindow):
         #plt.imshow(input_img, cmap = plt.get_cmap('gray'))
         #plt.plot(xc2, yc2, '*', color='purple')
         #plt.show()    
+        
         ##_______________HYBRID_____________
-    def button_clicked1(self):  
-        fileName, _filter = QFileDialog.getOpenFileName(self, "Title"," " , "Filter -- img file (*.jpg *.PNG);;img file (*.PNG)")
+    def button_clicked1(self):
+        
+        fileName, _filter = QFileDialog.getOpenFileName(self, "Title"," " , "Filter -- img file (*.JPEG *.PNG);;img file ( *.JPEG *.PNG)")
         if fileName:
             pixmap = QPixmap(fileName)
             self.pixmap = pixmap.scaled(256, 256, QtCore.Qt.KeepAspectRatio,QtCore.Qt.FastTransformation) 
@@ -1009,6 +1011,7 @@ class CV(QtWidgets.QMainWindow):
              
             # resize image
             self.color_img1 = cv2.resize(self.color_img1, dim, interpolation = cv2.INTER_AREA)
+            
             self.gray_img1 =self.rgb2gray(self.color_img1) 
             
             self.pixels1 = np.asarray(self.color_img1)
@@ -1023,7 +1026,7 @@ class CV(QtWidgets.QMainWindow):
 #        return np.dot(rgb_image[...,:3], [0.299, 0.587, 0.114])  # ... mean  all rgb values     
     
     def button_clicked2(self):  
-        fileName, _filter = QFileDialog.getOpenFileName(self, "Title"," " , "Filter -- img file (*.jpg *.PNG *.jpeg);;img file (*.PNG *.jpeg)")
+        fileName, _filter = QFileDialog.getOpenFileName(self, "Title"," " , "Filter -- img file (*.JPEG);;img file (*.JPEG)")
         if fileName:
             pixmap = QPixmap(fileName)
             self.pixmap = pixmap.scaled(256, 256, QtCore.Qt.KeepAspectRatio,QtCore.Qt.FastTransformation) 
@@ -1031,7 +1034,7 @@ class CV(QtWidgets.QMainWindow):
             #plt.imshow(self.color_img, cmap=plt.get_cmap('gray'), vmin=0, vmax=1)
 #            einstein = ndimage.imread("einstein.png", flatten=True)
             width = 256
-            height = 256 # keep original height
+            height = 256 
             dim = (width, height)
              
             # resize image
@@ -1048,10 +1051,10 @@ class CV(QtWidgets.QMainWindow):
             
     def button_clicked3(self):  
 
-           hybrid   = self.hybridImage (self.gray_img2, self.gray_img1, 25, 10)
+           self.hybrid   = self.hybridImage (self.gray_img2, self.gray_img1, 25, 10)
 #           misc.imsave("marilyn-einstein.png", numpy.real(hybrid))
-           
-           output_hybird = np.array(numpy.real(hybrid)*200).astype(np.uint8)
+           output_hybird = np.array(self.hybrid).astype(np.int32)
+#           output_hybird = np.array(numpy.real(hybrid)*200).astype(np.uint8)
            output_hybird = qimage2ndarray.array2qimage(output_hybird)
            output_hybird = QPixmap(output_hybird)
            output_hybird = output_hybird.scaled(256, 256, QtCore.Qt.KeepAspectRatio, QtCore.Qt.FastTransformation)
@@ -1070,7 +1073,7 @@ class CV(QtWidgets.QMainWindow):
         
     def Display_image3(self):
         
-        self.ui.label_histograms_output_2.setPixmap(self.pixmap)#####for input image 2
+        self.ui.label_histograms_output_2.setPixmap(self.pixmap)#####for output image 2
         self.ui.label_histograms_output_2.show     
         
 
