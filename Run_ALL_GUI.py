@@ -1060,9 +1060,7 @@ class CV(QtWidgets.QMainWindow):
     def button_clicked2(self):  
 #<<<<<<< HEAD
         fileName, _filter = QFileDialog.getOpenFileName(self, "Title"," " , "Filter -- img file (*.JPEG);;img file (*.JPEG)")
-#=======
-#        fileName, _filter = QFileDialog.getOpenFileName(self, "Title"," " , "Filter -- img file (*.jpg *.PNG);;img file (*.PNG)")
-#>>>>>>> 7c06bb2297bbdd28ffa71ad9dfb2da59c8b30c8c
+
         if fileName:
             pixmap = QPixmap(fileName)
             self.pixmap = pixmap.scaled(256, 256, QtCore.Qt.KeepAspectRatio,QtCore.Qt.FastTransformation) 
