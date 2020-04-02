@@ -13,6 +13,7 @@ from PyQt5.QtWidgets import QLineEdit
 from PyQt5.QtWidgets import QLabel
 import sys
 from os import listdir
+import cv2
 from os.path import isfile
 import numpy as np
 import matplotlib.pyplot as plt
@@ -39,11 +40,23 @@ class Frequency(QtWidgets.QMainWindow):
         self.ui.pushButton_histograms_load_4.clicked.connect(self.button_clicked3)##OUTPUT HYBRID
 
     def button_clicked1(self):  
-        fileName, _filter = QFileDialog.getOpenFileName(self, "Title"," " , "Filter -- img file (*.jpg *.PNG);;img file (*.PNG)")
+        fileName, _filter = QFileDialog.getOpenFileName(self, "Title"," " , "Filter -- img file ( *.PNG);;img file (*.PNG)")
         if fileName:
             pixmap = QPixmap(fileName)
             self.pixmap = pixmap.scaled(256, 256, QtCore.Qt.KeepAspectRatio,QtCore.Qt.FastTransformation) 
             self.color_img1 =mpimg.imread(fileName)
+            
+            
+            width = 256
+            height = 256 # keep original height
+            dim = (width, height)
+             
+            # resize image
+            self.color_img1 = cv2.resize(self.color_img1, dim, interpolation = cv2.INTER_AREA)
+             
+#            print('Resized Dimensions : ',resized.shape)
+            
+            
             self.gray_img1 =self.rgb2gray(self.color_img1) 
             
             self.pixels1 = np.asarray(self.color_img1)
@@ -65,6 +78,13 @@ class Frequency(QtWidgets.QMainWindow):
             self.color_img2 =mpimg.imread(fileName)
             #plt.imshow(self.color_img, cmap=plt.get_cmap('gray'), vmin=0, vmax=1)
 #            einstein = ndimage.imread("einstein.png", flatten=True)
+            width = 256
+            height = 256 # keep original height
+            dim = (width, height)
+             
+            # resize image
+            self.color_img2 = cv2.resize(self.color_img2, dim, interpolation = cv2.INTER_AREA)
+            
             self.gray_img2 =self.rgb2gray(self.color_img2)
             
             self.pixels2 = np.asarray(self.color_img2)
