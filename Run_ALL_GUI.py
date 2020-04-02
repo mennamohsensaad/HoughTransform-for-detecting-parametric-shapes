@@ -888,7 +888,7 @@ class CV(QtWidgets.QMainWindow):
 #_________________________________________Harris_corner_detectors____________________________________________________    
      
     def LoadImage3(self):  
-        self.fileName, _filter = QFileDialog.getOpenFileName(self, "Title"," " , "Filter -- img file (*.jpg *.PNG *.JPEG *.JFIF);;img file (*.jpg *.PNG *.JPEG *.JFIF)")
+        self.fileName, _filter = QFileDialog.getOpenFileName(self, "Title"," " , "Filter -- img file (*.jpg  *.JPEG *.JFIF);;img file (*.jpg  *.JPEG *.JFIF)")
         if self.fileName:
             self.pixmap = QPixmap(self.fileName)
             self.input_img =mpimg.imread(self.fileName)
