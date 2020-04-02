@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>884</width>
-    <height>493</height>
+    <width>856</width>
+    <height>503</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -964,6 +964,11 @@
             <string>Circles</string>
            </property>
           </item>
+          <item>
+           <property name="text">
+            <string>Canny</string>
+           </property>
+          </item>
          </widget>
         </item>
        </layout>
@@ -977,28 +982,16 @@
          <height>71</height>
         </rect>
        </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="title">
-        <string>Additional  Tunable Parameters</string>
+        <string>Add Mask size for Canny</string>
        </property>
       </widget>
-     </widget>
-     <widget class="QPushButton" name="Hough_ApplyButton">
-      <property name="geometry">
-       <rect>
-        <x>30</x>
-        <y>250</y>
-        <width>111</width>
-        <height>41</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>12</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>Apply</string>
-      </property>
      </widget>
      <widget class="QLabel" name="label_7">
       <property name="geometry">
@@ -1061,7 +1054,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>canny using opencv</string>
+       <string>Canny with opencv</string>
       </property>
      </widget>
      <widget class="QPushButton" name="pushButton_opencv">
@@ -1072,6 +1065,12 @@
         <width>75</width>
         <height>23</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <weight>50</weight>
+        <bold>false</bold>
+       </font>
       </property>
       <property name="text">
        <string>Apply</string>
@@ -1236,7 +1235,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>884</width>
+     <width>856</width>
      <height>21</height>
     </rect>
    </property>
