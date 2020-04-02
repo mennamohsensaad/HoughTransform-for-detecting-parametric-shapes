@@ -58,7 +58,7 @@ class CV(QtWidgets.QMainWindow):
         self.ui.pushButton_Harris_load.clicked.connect(self.LoadImage3)
     
     def LoadImage(self):  
-        self.fileName, _filter = QFileDialog.getOpenFileName(self, "Title"," " , "Filter -- img file (*.jpg *.PNG *.JPEG .*JFIF);;img file (*.PNG)")
+        self.fileName, _filter = QFileDialog.getOpenFileName(self, "Title"," " , "Filter -- img file (*.jpg *.PNG *.JPEG *.JFIF);;img file (*.jpg *.PNG *.JPEG *.JFIF)")
         if self.fileName:
             self.pixmap = QPixmap(self.fileName)
             self.input_img =mpimg.imread(self.fileName)
@@ -806,7 +806,7 @@ class CV(QtWidgets.QMainWindow):
 #_________________________________________Harris_corner_detectors____________________________________________________    
      
     def LoadImage3(self):  
-        self.fileName, _filter = QFileDialog.getOpenFileName(self, "Title"," " , "Filter -- img file (*.jpg *.PNG);;img file (*.PNG)")
+        self.fileName, _filter = QFileDialog.getOpenFileName(self, "Title"," " , "Filter -- img file (*.jpg *.PNG *.JPEG *.JFIF);;img file (*.jpg *.PNG *.JPEG *.JFIF)")
         if self.fileName:
             self.pixmap = QPixmap(self.fileName)
             self.input_img =mpimg.imread(self.fileName)

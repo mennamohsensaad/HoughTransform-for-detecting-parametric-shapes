@@ -24,7 +24,7 @@ def gradient_y(img) :
 
 #Harris Corner Detector Implementation and test
 
-img_path = './images/images.jfif'
+img_path = './images/2.jpeg'
 #test1.bmp
 #test2.jpg
 
