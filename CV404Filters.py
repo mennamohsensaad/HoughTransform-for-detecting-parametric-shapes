@@ -19,9 +19,10 @@ import qimage2ndarray
 from scipy import ndimage
 #import array2qimage 
 import math
-import matplotlib.pyplot as plt
+
 import matplotlib.image as mpimg
 from scipy.ndimage.filters import convolve
+import matplotlib.pyplot as plt
 #import cv2
 
 #

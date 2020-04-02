@@ -1,6 +1,3 @@
-
-###_____________RADWA_________
-
 #Import Libraries
 import matplotlib.pyplot as plt
 import numpy as np
@@ -27,11 +24,11 @@ def gradient_y(img) :
 
 #Harris Corner Detector Implementation and test
 
-img_path = './images/2.jpeg'
+img_path = '../data/test1.bmp'
 #test1.bmp
 #test2.jpg
 
-ratio = 0.01
+ratio = 0.02
 
 #Phase I : Find filtered grdient
 #Load the input image
@@ -122,6 +119,6 @@ plt.plot(xc, yc, '*', color='purple')
 plt.show()
 
 #without using thresholding
-#plt.imshow(input_img, cmap = plt.get_cmap('gray'))
-#plt.plot(xc2, yc2, '*', color='purple')
-#plt.show()
+plt.imshow(input_img, cmap = plt.get_cmap('gray'))
+plt.plot(xc2, yc2, '*', color='purple')
+plt.show()
