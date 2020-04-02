@@ -28,7 +28,7 @@ img_path = './images/2.jpeg'
 #test1.bmp
 #test2.jpg
 
-ratio = 0.02
+ratio = 0.01
 
 #Phase I : Find filtered grdient
 #Load the input image
