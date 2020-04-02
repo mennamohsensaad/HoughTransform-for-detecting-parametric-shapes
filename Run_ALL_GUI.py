@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Apr  2 22:46:52 2020
+
+@author: Menna
+"""
+
 from PyQt5 import QtWidgets,QtGui , QtCore ,Qt
 from PyQt5.QtWidgets import   QFileDialog  ,QWidget,QApplication
 from PyQt5.QtGui import QPixmap,QPainter,QPen
@@ -545,7 +552,8 @@ class CV(QtWidgets.QMainWindow):
             self.ui.label_snake_output.clear()
             self.ui.label_snake_output_running.clear()
             pixels = asarray(self.input_img)
-            #print(pixels.shape)
+            self.Image =io.imread(self.fileName,0)
+            print(self.Image)
             self.ui.lineEdit_size_snake.setText(""+str(pixels.shape[0])+" "+str('x')+" "+str(pixels.shape[1])+"")
             
     
@@ -553,8 +561,10 @@ class CV(QtWidgets.QMainWindow):
         
         snake_list=self.active_contour_model(self.fileName)
         #print(snake_list)
+        self.calc_area_preimeter(snake_list)
         chainCode=self.DriverFunction(snake_list) 
-        self.ui.lineEdit_chain_code.setText(""+str(chainCode)+"")#+str('x')+""+str(" ")+"")
+        self.ui.lineEdit_chain_code.setText(""+str(chainCode)+"")#+str('x')+""+str(" ")+""
+        
         
     def intp(self,x_list,y_list):
         new_x = []
@@ -805,21 +815,20 @@ class CV(QtWidgets.QMainWindow):
         self.ui.label_snake_input.setPixmap(self.pixmap)
         self.ui.label_snake_output.clear()
         self.ui.label_snake_output_running.clear() 
-        
+        self.ui.lineEdit_area_of_contour.setText(""+str("")+"")
+        self.ui.lineEdit_Perimeter_of_contour.setText(""+str("")+"")
+        self.ui.lineEdit_chain_code.setText(""+str("")+"")
+        self.ui.lineEdit_iteration_num.setText(""+str("")+"")
     
     def Reset(self): 
         self.Clear_anchors()
-#        pixels=np.ones((10,10))
-#        iamge=array2qimage(pixels*1000)
-#        pixmap = QPixmap(iamge)
-#        self.ui.label_snake_output.setPixmap(pixmap)
-#        self.ui.label_snake_output_running.clear() 
         self.ui.lineEdit_chain_code.setText(""+str("")+"")
         self.ui.lineEdit_iteration_num.setText(""+str("")+"")
         self.ui.lineEdit_alpha.setText(""+str("")+"")
         self.ui.lineEdit_beta.setText(""+str("")+"")
         self.ui.lineEdit_gamma.setText(""+str("")+"")
-        
+        self.ui.lineEdit_area_of_contour.setText(""+str("")+"")
+        self.ui.lineEdit_Perimeter_of_contour.setText(""+str("")+"")
         
     def DriverFunction(self,ListOfPoints): 
         chainCode = self.generateChainCode(ListOfPoints)
@@ -846,6 +855,34 @@ class CV(QtWidgets.QMainWindow):
             #print(b)
             chainCode.append(self.getChainCode(a[0], a[1], b[0], b[1])) 
         return chainCode 
+    
+    def calc_area_preimeter(self,snake):
+        
+        area=0
+        primeter=0
+        for i in range(len(snake)-1): 
+            a =snake[i] 
+            b=snake[i + 1] 
+            #print(b)
+            x,y=a[0],a[1]
+            nex_x,nex_y=b[0],b[1]
+            area += (x*nex_y-y*nex_x)/10
+            primeter +=abs((x-nex_x)+(y-nex_y)*1j)/5
+        area = area / 12
+        self.ui.lineEdit_area_of_contour.setText(""+str(int(area))+"")
+        self.ui.lineEdit_Perimeter_of_contour.setText(""+str(int(primeter))+"")
+        return area,primeter
+        
+
+#    
+#    def Area_and_perimeter(self):
+#        
+#        thresh = cv.threshold(self.Image,127,255,0)
+#        im2,contours,hierarchy = cv.findContours(thresh, 1, 2)
+#        area = cv.contourArea(contours[0])
+#        self.ui.lineEdit_area_of_contour.setText(""+str(area)+"")
+#        perimeter = cv.arcLength(contours[0],True)
+#        self.ui.lineEdit_Perimeter_of_contour.setText(""+str(perimeter)+"")
  
     
 #_________________________________________Harris_corner_detectors____________________________________________________    
@@ -887,28 +924,19 @@ class CV(QtWidgets.QMainWindow):
     def Apply_Harris (self) :
         
         input_img = cv2.imread(self.fileName)
-#        width = 128
-#        height = 128 # keep original height
-#        dim = (width, height)
-#             
-#            # resize image
-#        self.input_img = cv2.resize(self.input_img, dim, interpolation = cv2.INTER_AREA)
-
-        ratio = 0.01
+        ratio =float(self.ui.ratio.text())
         
         #Phase I : Find filtered grdient
         #Load the input image
 #        input_img = imageio.imread(img_path)
         
         #Convert the image to grayscale
-        gray_input_img = self.rgb2gray(input_img)
-        
+        gray_input_img = rgb2gray(input_img)
         #Apply gaussian blurring
-        blur_img = ndimage.gaussian_filter(gray_input_img, sigma = 1.0)
-        
+        #blur_img = ndimage.gaussian_filter(gray_input_img, sigma = 1.0)
+        blur_img = gaussian(gray_input_img, sigma = 0.8)
         #Find gradient Fx
         x_grad = self.gradient_x(blur_img)
-        
         #Find gradient Fy
         y_grad = self.gradient_y(blur_img)
         
@@ -979,17 +1007,21 @@ class CV(QtWidgets.QMainWindow):
                 xc2.append(i[1])
                 yc2.append(i[0])
         
-        #using thresholding
-        plt.imshow(input_img, cmap = plt.get_cmap('gray'))
-        plt.plot(xc, yc, '*', color='purple')
-        plt.show()
+        pixmap = QPixmap(self.fileName)
+        painter= QtGui.QPainter(pixmap)
+        painter.begin(self)
+        penRect= QtGui.QPen(QtCore.Qt.red)
+        penRect.setWidth(4)
+        painter.setPen(penRect)
+        for i in range(len(xc)): 
+            x=  xc[i]+2
+            y= yc[i]
+            #print(b)
+            painter.drawPoint(x,y)
         
-        pixels=np.array(input_img)
-        #gray2qimage
-        imgh=array2qimage(pixels)
-        pixmap = QPixmap(imgh)
-        self.ui.label_Harris_output.setPixmap(pixmap)
-        
+        painter.end()
+        result=pixmap#.scaled(int(self.pixmap.height()),int(self.pixmap.width()))
+        self.ui.label_Harris_output.setPixmap(result)
         
         
         #without using thresholding
@@ -1026,7 +1058,11 @@ class CV(QtWidgets.QMainWindow):
 #        return np.dot(rgb_image[...,:3], [0.299, 0.587, 0.114])  # ... mean  all rgb values     
     
     def button_clicked2(self):  
+#<<<<<<< HEAD
         fileName, _filter = QFileDialog.getOpenFileName(self, "Title"," " , "Filter -- img file (*.JPEG);;img file (*.JPEG)")
+#=======
+#        fileName, _filter = QFileDialog.getOpenFileName(self, "Title"," " , "Filter -- img file (*.jpg *.PNG);;img file (*.PNG)")
+#>>>>>>> 7c06bb2297bbdd28ffa71ad9dfb2da59c8b30c8c
         if fileName:
             pixmap = QPixmap(fileName)
             self.pixmap = pixmap.scaled(256, 256, QtCore.Qt.KeepAspectRatio,QtCore.Qt.FastTransformation) 
@@ -1134,7 +1170,7 @@ class CV(QtWidgets.QMainWindow):
        return highPassed + lowPassed
         ###___________________HISTOGRAM__________
     def LoadImage(self):  
-        self.fileName, _filter = QFileDialog.getOpenFileName(self, "Title"," " , "Filter -- img file (*.jpg *.PNG);;img file (*.PNG  *.jpeg )")
+        self.fileName, _filter = QFileDialog.getOpenFileName(self, "Title"," " , "Filter -- img file (*.jpg *.PNG);;img file (*.PNG)")
         if self.fileName:
             pixmap = QPixmap(self.fileName)
             self.pixmap = pixmap.scaled(256,256, QtCore.Qt.KeepAspectRatio, QtCore.Qt.FastTransformation) 
@@ -1616,13 +1652,15 @@ class CV(QtWidgets.QMainWindow):
 ##          gray = 0.2989 * r + 0.5870 * g + 0.1140 * b
 ##          return gray
     def Display_image(self):
-        if self.fileName[66:100]=="House.jpg" or self.fileName[66:100]=="Pyramids2.jpg" or self.fileName[66:100]=="some-pigeon.jpg":
-             self.input_iamge=np.array(self.gray_img)
-        else:
-             self.input_iamge=np.array(self.gray_img*200)
-        #print (input_iamge)
-        self.input_iamge=qimage2ndarray.array2qimage(self.input_iamge)
-        self.input_iamge=QPixmap(self.input_iamge)
+#        if self.fileName[66:100]=="House.jpg" or self.fileName[66:100]=="Pyramids2.jpg" or self.fileName[66:100]=="some-pigeon.jpg":
+#             self.input_iamge=np.array(self.gray_img)
+#        else:
+#             self.input_iamge=np.array(self.gray_img*200)
+#        #print (input_iamge)
+        
+        self.input_iamge=np.array(self.gray_img).astype(np.int32)
+        self.input_iamge1=qimage2ndarray.array2qimage(self.input_iamge)
+        self.input_iamge=QPixmap(self.input_iamge1)
         self.ui.label_filters_input.setPixmap(self.input_iamge)
         self.ui.label_filters_input.show()
 #
@@ -1915,7 +1953,7 @@ class CV(QtWidgets.QMainWindow):
             #self.input_iamge=array2qimage.qimage2ndarray(self.input_iamge)
             input_size=(self.ui.lineEdit_3.text())
             self.filter_img =self.gaussian_filter_2(int(input_size),int(input_size),2)
-            self.filter=np.array(self.filter_img*50)
+            self.filter=np.array(self.filter_img)
             self.input_iamge=qimage2ndarray.array2qimage(self.filter)
             self.output_iamge=QPixmap(self.input_iamge)
             self.ui.label_filters_output.setPixmap(self.output_iamge)
@@ -1924,7 +1962,7 @@ class CV(QtWidgets.QMainWindow):
         elif self.filters=="Mean":   
                 input_size=(self.ui.lineEdit_3.text())
                 self.filter_img =self.mean(int(input_size))
-                self.filter=np.array(self.filter_img*200)
+                self.filter=np.array(self.filter_img)
                 self.input_iamge=qimage2ndarray.array2qimage(self.filter)
                 self.output_iamge=QPixmap(self.input_iamge)
                 self.ui.label_filters_output.setPixmap(self.output_iamge)
@@ -1934,7 +1972,7 @@ class CV(QtWidgets.QMainWindow):
         elif self.filters=="Median": 
             input_size=(self.ui.lineEdit_3.text())
             self.filter_img =self.median_filter(int(input_size))
-            self.filter=np.array(self.filter_img*200)
+            self.filter=np.array(self.filter_img)
             self.input_iamge=qimage2ndarray.array2qimage(self.filter)
             self.output_iamge=QPixmap(self.input_iamge)
             self.ui.label_filters_output.setPixmap(self.output_iamge)
@@ -1943,7 +1981,7 @@ class CV(QtWidgets.QMainWindow):
         
         elif self.filters=="Prewitt":    
             self.filter_img =self.prewitt()
-            self.filter=np.array(self.filter_img*200)
+            self.filter=np.array(self.filter_img)
             self.input_iamge=qimage2ndarray.array2qimage(self.filter)
             self.output_iamge=QPixmap(self.input_iamge)
             self.ui.label_filters_output.setPixmap(self.output_iamge)
@@ -1952,7 +1990,7 @@ class CV(QtWidgets.QMainWindow):
               
         elif self.filters=="Roberts":    
             self.filter_img =self.robert()
-            self.filter=np.array(self.filter_img*200)
+            self.filter=np.array(self.filter_img)
             self.input_iamge=qimage2ndarray.array2qimage(self.filter)
             self.output_iamge=QPixmap(self.input_iamge)
             self.ui.label_filters_output.setPixmap(self.output_iamge)
@@ -1960,7 +1998,7 @@ class CV(QtWidgets.QMainWindow):
             
         elif self.filters=="Sobel":    
             self.filter_img =self.sobel_2()
-            self.filter=np.array(self.filter_img*200)
+            self.filter=np.array(self.filter_img)
             self.input_iamge=qimage2ndarray.array2qimage(self.filter)
             self.output_iamge=QPixmap(self.input_iamge)
             self.ui.label_filters_output.setPixmap(self.output_iamge)
@@ -1979,7 +2017,7 @@ class CV(QtWidgets.QMainWindow):
             if self.filters=="Gaussian":
                 #self.input_iamge=array2qimage.qimage2ndarray(self.input_iamge)
                 self.filter_img =self.im_gaussian_noise(0,0.3)
-                self.filter=np.array(self.filter_img*200)
+                self.filter=np.array(self.filter_img)
                 self.input_iamge=qimage2ndarray.array2qimage(self.filter)
                 self.output_iamge=QPixmap(self.input_iamge)
                 self.ui.label_filters_output.setPixmap(self.output_iamge)
@@ -1987,7 +2025,7 @@ class CV(QtWidgets.QMainWindow):
             
             elif self.filters=="Uniform":    
                 self.filter_img =self. Random_Uniform(0.3)
-                self.filter=np.array(self.filter_img*300)
+                self.filter=np.array(self.filter_img)
                 self.input_iamge=qimage2ndarray.array2qimage(self.filter)
                 self.output_iamge=QPixmap(self.input_iamge)
                 self.ui.label_filters_output.setPixmap(self.output_iamge)
@@ -1996,7 +2034,7 @@ class CV(QtWidgets.QMainWindow):
     #       
             elif self.filters=="Salt-papper":    
                 self.filter_img =self.salt_pepper_noise(0.3)
-                self.filter=np.array(self.filter_img*200)
+                self.filter=np.array(self.filter_img)
                 self.input_iamge=qimage2ndarray.array2qimage(self.filter)
                 self.output_iamge=QPixmap(self.input_iamge)
                 self.ui.label_filters_output.setPixmap(self.output_iamge)
@@ -2019,4 +2057,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
