@@ -27,7 +27,7 @@ def gradient_y(img) :
 
 #Harris Corner Detector Implementation and test
 
-img_path = './images/2.jpeg'
+img_path = './images/intersected_lines.jpeg'
 #test1.bmp
 #test2.jpg
 
@@ -118,7 +118,7 @@ for i in sorted_L2 :
 
 #using thresholding
 plt.imshow(input_img, cmap = plt.get_cmap('gray'))
-plt.plot(xc, yc, '*', color='purple')
+plt.plot(xc, yc, '*', color='red')
 plt.show()
 
 #without using thresholding

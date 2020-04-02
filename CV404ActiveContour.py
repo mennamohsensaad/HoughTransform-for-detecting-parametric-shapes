@@ -230,7 +230,7 @@ def calc_area_preimeter(snake):
         return area,primeter
 
 
-imageName = "./images/cell.jpg"
+imageName = "./images/cell.jpeg"
 r=100 #radius
 c=[100,100] #center
 theta=np.linspace(0, 2*np.pi, 200) # min, max, number of divisions
