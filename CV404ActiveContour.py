@@ -175,13 +175,13 @@ def active_contour(image,color, snake, alpha=0.01, beta=0.1,
 """
 we use a hash function. The difference in X(dx) and Y(dy) co-ordinates of two successive points are calculated and hashed to generate the key for the chain code between the two points.
 
-Chain code list: [5, 6, 7, 4, -1, 0, 3, 2, 1]
+Chain code list: [5, 6, 7, 4, 0, 3, 2, 1]
 
 Hash function:  C(dx, dy) = 3dy + dx + 4
 """
 
 
-codeList = [5, 6, 7, 4, -1, 0, 3, 2, 1] 
+codeList = [5, 6, 7, 4, 0, 3, 2, 1] 
   
   
 # This function generates the chaincode  
@@ -190,6 +190,13 @@ def getChainCode(x1, y1, x2, y2):
     dx = x2 - x1 
     dy = y2 - y1 
     hashKey = 3 * dy + dx + 4
+   
+    if  int(hashKey) >7:
+             hashKey=7
+    elif int(hashKey) <0 :
+             hashKey=0
+    else:
+            hashKey=hashKey
     #print(hashKey )
     return codeList[int(hashKey)] 
   

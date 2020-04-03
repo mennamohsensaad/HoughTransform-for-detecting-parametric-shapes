@@ -822,10 +822,18 @@ class CV(QtWidgets.QMainWindow):
     
     
     def getChainCode(self,x1, y1, x2, y2): 
-        codeList = [5, 6, 7, 4, -1, 0, 3, 2, 1]     # to detect direction
+        codeList = [5, 6, 7, 4, 0, 3, 2, 1]
+        # to detect direction
         dx = x2 - x1 
         dy = y2 - y1 
         hashKey = 3 * dy + dx + 4
+        if  int(hashKey) >7:
+             hashKey=7
+        elif int(hashKey) <0 :
+             hashKey=0
+        else:
+            hashKey=hashKey
+        #print(hashKey)
         return codeList[int(hashKey)] 
 
     def generateChainCode(self,ListOfPoints): 
@@ -852,8 +860,8 @@ class CV(QtWidgets.QMainWindow):
             area += (x*nex_y-y*nex_x)/10
             primeter +=abs((x-nex_x)+(y-nex_y)*1j)/5
         area = area / 12
-        self.ui.lineEdit_area_of_contour.setText(""+str(int(area))+"")
-        self.ui.lineEdit_Perimeter_of_contour.setText(""+str(int(primeter))+"")
+        self.ui.lineEdit_area_of_contour.setText(""+str(float(area))+""+""+""+str(' ')+""+str('m^2')+"")
+        self.ui.lineEdit_Perimeter_of_contour.setText(""+str(float(primeter))+""+""+str(' ')+""+""+str('m')+"")
         return area,primeter
         
 
@@ -1349,7 +1357,7 @@ class CV(QtWidgets.QMainWindow):
         flat = img_arr.flatten()
         sns.distplot(flat, hist=True, kde=True, color = 'darkblue', hist_kws={'edgecolor':'black'},kde_kws={'linewidth': 5})         
 #        plotWindow2 = self.ui.output_histogram
-#        plotWindow2.plot(distrubution_curve, pen='w') 
+#        plotWindow2.plot(flat, pen='w') 
         """note that this is plot in consol """ 
         
     def make_cumsum(self,histogram):
