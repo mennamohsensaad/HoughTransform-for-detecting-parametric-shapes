@@ -1,6 +1,8 @@
+# -*- coding: utf-8 -*-
+"""
 
-
-####@Nashwa
+@author: Nashwa
+"""
 
 import numpy as np
 from  qimage2ndarray import array2qimage
