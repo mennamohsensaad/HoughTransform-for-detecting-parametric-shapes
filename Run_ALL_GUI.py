@@ -1,7 +1,3 @@
-"""
-
-@author: Nashwa
-"""
 
 
 from PyQt5 import QtWidgets,QtGui , QtCore ,Qt
