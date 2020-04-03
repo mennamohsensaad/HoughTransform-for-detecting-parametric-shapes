@@ -27,7 +27,7 @@ def gradient_y(img) :
 
 #Harris Corner Detector Implementation and test
 
-img_path = './images/intersected_lines.jpeg'
+img_path = './images/chess.png'
 #test1.bmp
 #test2.jpg
 
