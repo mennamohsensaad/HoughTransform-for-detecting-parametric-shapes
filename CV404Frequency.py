@@ -97,10 +97,10 @@ class Frequency(QtWidgets.QMainWindow):
             
     def button_clicked3(self):  
 
-           hybrid   = self.hybridImage (self.gray_img2, self.gray_img1, 25, 10)
+           self.hybrid   = self.hybridImage (self.gray_img2, self.gray_img1, 25, 10)
 #           misc.imsave("marilyn-einstein.png", numpy.real(hybrid))
-           
-           output_hybird = np.array(numpy.real(hybrid)*200).astype(np.uint8)
+           output_hybird = np.array(self.hybrid).astype(np.int32)
+#           output_hybird = np.array(numpy.real(hybrid)*200).astype(np.uint8)
            output_hybird = qimage2ndarray.array2qimage(output_hybird)
            output_hybird = QPixmap(output_hybird)
            output_hybird = output_hybird.scaled(256, 256, QtCore.Qt.KeepAspectRatio, QtCore.Qt.FastTransformation)
