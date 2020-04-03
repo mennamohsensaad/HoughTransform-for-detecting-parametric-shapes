@@ -1,3 +1,8 @@
+"""
+
+@author: Nashwa
+"""
+
 
 from PyQt5 import QtWidgets,QtGui , QtCore ,Qt
 from PyQt5.QtWidgets import   QFileDialog  ,QWidget,QApplication
@@ -1065,10 +1070,12 @@ class CV(QtWidgets.QMainWindow):
             self.Label2_Name()
             self.size2()
             
+            
     def button_clicked3(self):  
 
            self.hybrid   = self.hybridImage (self.gray_img2, self.gray_img1, 25, 10)
 #           misc.imsave("marilyn-einstein.png", numpy.real(hybrid))
+           
            output_hybird = np.array(self.hybrid).astype(np.int32)
            #output_hybird = np.array(numpy.real(hybrid)*200).astype(np.uint8)
            output_hybird = qimage2ndarray.array2qimage(output_hybird)
