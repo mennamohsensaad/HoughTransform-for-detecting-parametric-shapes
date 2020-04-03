@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Apr  2 22:46:52 2020
+Created on Thu Apr  
 
 @author: Menna
 """
-
 from PyQt5 import QtWidgets,QtGui , QtCore ,Qt
 from PyQt5.QtWidgets import   QFileDialog  ,QWidget,QApplication
 from PyQt5.QtGui import QPixmap,QPainter,QPen
@@ -30,35 +29,19 @@ from scipy.ndimage import imread
 import handleImageClass as handleImage
 from collections import defaultdict
 from os import listdir
-import numpy as np
-from scipy import ndimage
 import numpy
 from numpy.fft import fft2, ifft2, fftshift, ifftshift
 from scipy import misc
-from scipy import ndimage
-import math
 from scipy.misc import imsave
 from matplotlib.pyplot import imread
 from imageio import imread
 import qimage2ndarray
 import pyqtgraph as pg
 from pyqtgraph import PlotWidget
-import matplotlib.pyplot as plt
-from numpy import asarray
-from PIL import Image
-from  qimage2ndarray import array2qimage
-import seaborn as sns
-from os import listdir
-from os.path import isfile
-import numpy as np
-from numpy import asarray
-from  qimage2ndarray import array2qimage
 import seaborn as sns
 from PIL.ImageQt import ImageQt
 from os.path import isfile , join
-import numpy as np
-import qimage2ndarray
-from scipy import ndimage
+
 
 class CV(QtWidgets.QMainWindow):
     def __init__(self):
